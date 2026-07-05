@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import { publications, CATEGORY_LABELS } from "@/data/publications";
 import { CountUp } from "@/components/site/count-up";
+import { CATEGORY_ORDER } from "@/lib/config";
 import {
   Brain,
   GraduationCap,
@@ -30,17 +31,7 @@ const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>
   other: BookOpen,
 };
 
-const CATEGORY_ORDER = [
-  "education",
-  "sociology",
-  "ai_ml",
-  "economics",
-  "international",
-  "linguistics",
-  "infosec",
-  "radio_embedded",
-  "tech_policy",
-];
+const CATEGORY_ORDER_KEYS = CATEGORY_ORDER.filter((k) => k !== "other");
 
 export function Stats() {
   const categoryCounts = React.useMemo(() => {
@@ -93,7 +84,7 @@ export function Stats() {
 
         {/* Category cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {CATEGORY_ORDER.filter((c) => categoryCounts[c]).map((cat, i) => {
+          {CATEGORY_ORDER_KEYS.filter((c) => categoryCounts[c]).map((cat, i) => {
             const Icon = CATEGORY_ICONS[cat] || BookOpen;
             const count = categoryCounts[cat] || 0;
             const pct = Math.round((count / total) * 100);

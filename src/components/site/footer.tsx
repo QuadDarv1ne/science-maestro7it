@@ -128,34 +128,20 @@ function publicationsCount() {
 }
 
 function BuildTimestamp() {
-  const [mounted, setMounted] = React.useState(false);
-  React.useEffect(() => setMounted(true), []);
-
-  if (!mounted) {
-    return <span className="font-mono">обновлено: …</span>;
-  }
-
-  const now = new Date();
-  const months = [
-    "янв",
-    "фев",
-    "мар",
-    "апр",
-    "май",
-    "июн",
-    "июл",
-    "авг",
-    "сен",
-    "окт",
-    "ноя",
-    "дек",
-  ];
-  const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-  const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+  const timestamp = React.useMemo(() => {
+    const now = new Date();
+    const months = [
+      "янв", "фев", "мар", "апр", "май", "июн",
+      "июл", "авг", "сен", "окт", "ноя", "дек",
+    ];
+    const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+    const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    return `${dateStr} ${timeStr}`;
+  }, []);
 
   return (
     <span className="font-mono">
-      обновлено: {dateStr} {timeStr}
+      обновлено: {timestamp}
     </span>
   );
 }

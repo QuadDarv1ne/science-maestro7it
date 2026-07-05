@@ -2,8 +2,12 @@
 """Generate publications.ts from zenodo_data.json with categories."""
 import json
 import re
+import os
 
-with open('/home/z/my-project/scripts/zenodo_data.json', 'r', encoding='utf-8') as f:
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+
+with open(os.path.join(SCRIPT_DIR, 'zenodo_data.json'), 'r', encoding='utf-8') as f:
     records = json.load(f)
 
 # Categorization rules — keyword-based. Order matters (first match wins).
@@ -143,7 +147,7 @@ ts_lines.append('  photo2: "/author/photo2.png",')
 ts_lines.append("};")
 ts_lines.append("")
 
-out_path = '/home/z/my-project/src/data/publications.ts'
+out_path = os.path.join(PROJECT_ROOT, 'src', 'data', 'publications.ts')
 with open(out_path, 'w', encoding='utf-8') as f:
     f.write("\n".join(ts_lines))
 

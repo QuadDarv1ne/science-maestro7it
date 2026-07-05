@@ -31,6 +31,7 @@ import {
   CATEGORY_LABELS,
 } from "@/data/publications";
 import { formatDate, pluralRu } from "@/lib/utils";
+import { CATEGORY_ORDER, PAGE_SIZE } from "@/lib/config";
 import { ShareMenu } from "@/components/site/share-menu";
 import { CitationExport } from "@/components/site/citation-export";
 import { FeaturedPublications } from "@/components/site/featured-publications";
@@ -39,19 +40,6 @@ import { useFavorites } from "@/components/site/favorites-context";
 
 type SortKey = "newest" | "oldest" | "title";
 
-const CATEGORY_ORDER = [
-  "education",
-  "sociology",
-  "ai_ml",
-  "economics",
-  "international",
-  "linguistics",
-  "infosec",
-  "radio_embedded",
-  "tech_policy",
-  "other",
-];
-
 export function Publications() {
   const { favorites, isFavorite } = useFavorites();
   const [query, setQuery] = React.useState("");
@@ -59,7 +47,7 @@ export function Publications() {
   const [sort, setSort] = React.useState<SortKey>("newest");
   const [favoritesOnly, setFavoritesOnly] = React.useState(false);
   const [selected, setSelected] = React.useState<Publication | null>(null);
-  const [limit, setLimit] = React.useState(9);
+  const [limit, setLimit] = React.useState(PAGE_SIZE);
   const searchInputRef = React.useRef<HTMLInputElement>(null);
   const [kbdHintVisible, setKbdHintVisible] = React.useState(false);
 
@@ -68,7 +56,7 @@ export function Publications() {
     const handler = (e: Event) => {
       const cat = (e as CustomEvent).detail as string;
       setActiveCats(new Set([cat]));
-      setLimit(9);
+      setLimit(PAGE_SIZE);
       // small delay to let render settle
       setTimeout(() => {
         const el = document.getElementById("publications");
@@ -216,7 +204,7 @@ export function Publications() {
       else next.add(cat);
       return next;
     });
-    setLimit(9);
+    setLimit(PAGE_SIZE);
   };
 
   const resetFilters = () => {
@@ -224,7 +212,7 @@ export function Publications() {
     setActiveCats(new Set());
     setSort("newest");
     setFavoritesOnly(false);
-    setLimit(9);
+    setLimit(PAGE_SIZE);
   };
 
   return (
@@ -261,10 +249,10 @@ export function Publications() {
               <Input
                 ref={searchInputRef}
                 value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  setLimit(9);
-                }}
+                  onChange={(e) => {
+                    setQuery(e.target.value);
+                    setLimit(PAGE_SIZE);
+                  }}
                 placeholder="Поиск по названию, аннотации, теме…"
                 className="pl-9 pr-16 h-11 rounded-full bg-card"
               />
@@ -320,8 +308,9 @@ export function Publications() {
               <button
                 onClick={() => {
                   setFavoritesOnly((v) => !v);
-                  setLimit(9);
+                  setLimit(PAGE_SIZE);
                 }}
+                aria-pressed={favoritesOnly}
                 className={`text-xs px-3 py-1.5 rounded-full border transition-all inline-flex items-center gap-1.5 ${
                   favoritesOnly
                     ? "bg-accent text-accent-foreground border-accent shadow-sm"
@@ -347,10 +336,11 @@ export function Publications() {
               ).map((cat) => {
                 const active = activeCats.has(cat);
                 return (
-                  <button
-                    key={cat}
-                    onClick={() => toggleCat(cat)}
-                    className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
+              <button
+                key={cat}
+                onClick={() => toggleCat(cat)}
+                aria-pressed={active}
+                className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
                       active
                         ? "bg-accent text-accent-foreground border-accent shadow-sm"
                         : "bg-card border-border hover:border-accent/40 hover:bg-accent/5 text-muted-foreground hover:text-foreground"
@@ -493,9 +483,9 @@ export function Publications() {
               variant="outline"
               size="lg"
               className="rounded-full"
-              onClick={() => setLimit((l) => l + 9)}
+              onClick={() => setLimit((l) => l + PAGE_SIZE)}
             >
-              Показать ещё {Math.min(9, filtered.length - limit)} из{" "}
+              Показать ещё {Math.min(PAGE_SIZE, filtered.length - limit)} из{" "}
               {filtered.length - limit}
             </Button>
           </div>
@@ -540,9 +530,24 @@ export function Publications() {
 
               <div className="relative rounded-lg bg-muted/40 p-5 my-4">
                 <Quote className="absolute -top-2 -left-1 h-5 w-5 text-accent/40" />
-                <p className="text-sm sm:text-base leading-relaxed whitespace-pre-line pl-4">
-                  {selected.abstract}
-                </p>
+                {selected.abstract ? (
+                  <p className="text-sm sm:text-base leading-relaxed whitespace-pre-line pl-4">
+                    {selected.abstract}
+                  </p>
+                ) : (
+                  <p className="text-sm sm:text-base leading-relaxed pl-4 text-muted-foreground italic">
+                    Аннотация пока не опубликована. Полный текст доступен на{" "}
+                    <a
+                      href={selected.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-accent hover:underline"
+                    >
+                      Zenodo
+                    </a>
+                    .
+                  </p>
+                )}
               </div>
 
               <div className="grid sm:grid-cols-2 gap-3 mt-6">
@@ -580,18 +585,24 @@ export function Publications() {
                   />
                 </div>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Clock className="h-3 w-3" />
-                  {readingTime(selected.abstract)} мин чтения
-                  <span className="opacity-40">·</span>
-                  <span>{wordCount(selected.abstract)} слов</span>
+                  {selected.abstract ? (
+                    <>
+                      <Clock className="h-3 w-3" />
+                      {readingTime(selected.abstract)} мин чтения
+                      <span className="opacity-40">·</span>
+                      <span>{wordCount(selected.abstract)} слов</span>
+                    </>
+                  ) : (
+                    <span className="italic">Аннотация не опубликована</span>
+                  )}
                 </div>
               </div>
 
               <div className="mt-4 p-3 rounded-lg bg-muted/30 text-xs text-muted-foreground">
                 <strong className="text-foreground">Цитирование (ГОСТ):</strong> {author.name} {selected.title} [Электронный ресурс] // Zenodo. —{" "}
                 {selected.publicationDate}. — URL: {selected.url} (дата
-                обращения: [указать]). — DOI: {selected.doi}. — ORCID:
-                0009-0007-7605-539X.
+                обращения: [указать]). — DOI: {selected.doi}. — ORCID:{" "}
+                {author.orcid}.
               </div>
 
               {/* Related publications */}

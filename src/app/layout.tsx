@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as SonnerToaster } from "@/components/ui/sonner";
 import { ThemeProvider } from "@/components/site/theme-provider";
 import { StructuredData } from "@/components/site/structured-data";
+import { SITE_URL } from "@/lib/config";
+import { publications } from "@/data/publications";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,10 +25,10 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://science-maestro7it.ru"),
+  metadataBase: new URL(SITE_URL),
   title: "Science Maestro7IT — Дуплей Максим Игоревич · Научные публикации",
   description:
-    "Science Maestro7IT — персональный сайт научных работ Дуплея Максима Игоревича: старшего преподавателя информационных технологий, аналитика, философа, музыканта и DevOps-инженера. 30 научных публикаций на Zenodo.",
+    `Science Maestro7IT — персональный сайт научных работ Дуплея Максима Игоревича: старшего преподавателя информационных технологий, аналитика, философа, музыканта и DevOps-инженера. ${publications.length} научных публикаций на Zenodo.`,
   keywords: [
     "Science Maestro7IT",
     "Дуплей Максим Игоревич",
@@ -52,7 +53,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Science Maestro7IT — Дуплей Максим Игоревич · Научные публикации",
     description:
-      "30 научных публикаций в области ИИ, образования, лингвистики, международных отношений и радиотехнологий.",
+      `${publications.length} научных публикаций в области ИИ, образования, лингвистики, международных отношений и радиотехнологий.`,
     type: "website",
     locale: "ru_RU",
     siteName: "Science Maestro7IT",
@@ -68,8 +69,15 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Science Maestro7IT — Дуплей Максим Игоревич",
-    description: "30 научных публикаций на Zenodo",
+    description: `${publications.length} научных публикаций на Zenodo`,
     images: ["/og-image.svg"],
+  },
+  alternates: {
+    types: {
+      "application/rss+xml": [
+        { url: "rss.xml", title: "Science Maestro7IT RSS" },
+      ],
+    },
   },
 };
 
@@ -86,7 +94,6 @@ export default function RootLayout({
         <StructuredData />
         <ThemeProvider>
           {children}
-          <Toaster />
           <SonnerToaster
             position="bottom-right"
             richColors

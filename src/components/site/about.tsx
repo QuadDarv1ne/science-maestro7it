@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
+import { author } from "@/data/publications";
 import {
   Code2,
   Brain,
@@ -89,7 +90,7 @@ export function About() {
             материалы принадлежат автору.»
           </p>
           <footer className="mt-4 pl-8 text-sm text-muted-foreground">
-            © Дуплей Максим Игоревич, {new Date().getFullYear()} · ORCID: 0009-0007-7605-539X
+            © Дуплей Максим Игоревич, {new Date().getFullYear()} · ORCID: {author.orcid}
           </footer>
         </motion.blockquote>
 

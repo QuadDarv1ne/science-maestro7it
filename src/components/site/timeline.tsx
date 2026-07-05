@@ -70,7 +70,7 @@ export function Timeline() {
             Публикации по месяцам
           </h2>
           <p className="mt-4 text-base text-muted-foreground">
-            Активность публикации на Zenodo по месяцам. Все 30 работ вышли в
+            Активность публикации на Zenodo по месяцам. Все {publications.length} работ вышли в
             течение 2026 года — пик пришёлся на июнь.
           </p>
         </motion.div>
@@ -82,14 +82,18 @@ export function Timeline() {
           viewport={{ once: true, margin: "-50px" }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="rounded-2xl border border-border/60 bg-card p-6 sm:p-8"
+          role="img"
+          aria-label="Гистограмма публикаций по месяцам"
         >
-          <div className="flex items-end justify-between gap-2 sm:gap-3 h-64">
+          <div className="flex items-end justify-between gap-2 sm:gap-3 h-64" role="list">
             {buckets.map((b, i) => {
               const heightPct = (b.count / maxCount) * 100;
               return (
                 <div
                   key={b.key}
                   className="group relative flex-1 flex flex-col items-center justify-end h-full"
+                  role="listitem"
+                  aria-label={`${b.label}: ${b.count} ${pluralRu(b.count, ["публикация", "публикации", "публикаций"])}`}
                 >
                   {/* Tooltip */}
                   <div className="absolute -top-2 left-1/2 -translate-x-1/2 -translate-y-full opacity-0 group-hover:opacity-100 transition-opacity bg-popover border border-border rounded-md px-2 py-1 text-xs whitespace-nowrap pointer-events-none shadow-lg z-10">

@@ -5,7 +5,7 @@ import * as React from "react";
 const STORAGE_KEY = "science-maestro7it:favorites";
 
 interface FavoritesContextValue {
-  favorites: number[]; // publication IDs
+  favorites: number[];
   isFavorite: (id: number) => boolean;
   toggleFavorite: (id: number) => void;
   addFavorite: (id: number) => void;
@@ -19,7 +19,6 @@ const FavoritesContext = React.createContext<FavoritesContextValue | null>(null)
 export function FavoritesProvider({ children }: { children: React.ReactNode }) {
   const [favorites, setFavorites] = React.useState<number[]>([]);
 
-  // Load from localStorage on mount
   React.useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
@@ -34,14 +33,13 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Persist to localStorage on change
-  const persist = React.useCallback((next: number[]) => {
+  React.useEffect(() => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
     } catch {
       // ignore
     }
-  }, []);
+  }, [favorites]);
 
   const isFavorite = React.useCallback(
     (id: number) => favorites.includes(id),
@@ -50,43 +48,29 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
 
   const toggleFavorite = React.useCallback(
     (id: number) => {
-      setFavorites((prev) => {
-        const next = prev.includes(id)
-          ? prev.filter((x) => x !== id)
-          : [...prev, id];
-        persist(next);
-        return next;
-      });
+      setFavorites((prev) =>
+        prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+      );
     },
-    [persist]
+    []
   );
 
   const addFavorite = React.useCallback(
     (id: number) => {
-      setFavorites((prev) => {
-        if (prev.includes(id)) return prev;
-        const next = [...prev, id];
-        persist(next);
-        return next;
-      });
+      setFavorites((prev) => (prev.includes(id) ? prev : [...prev, id]));
     },
-    [persist]
+    []
   );
 
   const removeFavorite = React.useCallback(
     (id: number) => {
-      setFavorites((prev) => {
-        const next = prev.filter((x) => x !== id);
-        persist(next);
-        return next;
-      });
+      setFavorites((prev) => prev.filter((x) => x !== id));
     },
-    [persist]
+    []
   );
 
   const clearFavorites = React.useCallback(() => {
     setFavorites([]);
-    persist([]);
   }, []);
 
   const value = React.useMemo(
