@@ -572,10 +572,6 @@ html {
   transition-property: background-color, border-color, color, fill, stroke;
   transition-duration: 0.2s;
   transition-timing-function: ease-out;
-}
-
-/* But disable transitions during initial theme application to avoid flash */
-[data-theme] * {
   transition-delay: 0s;
 }
 

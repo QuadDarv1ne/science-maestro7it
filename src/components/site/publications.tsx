@@ -30,7 +30,7 @@ import {
   type Publication,
   CATEGORY_LABELS,
 } from "@/data/publications";
-import { formatDate, pluralRu } from "@/lib/utils";
+import { formatDate, pluralRu, readingTime as getReadingTime, wordCount as getWordCount } from "@/lib/utils";
 import { CATEGORY_ORDER, PAGE_SIZE } from "@/lib/config";
 import { ShareMenu } from "@/components/site/share-menu";
 import { CitationExport } from "@/components/site/citation-export";
@@ -588,9 +588,9 @@ export function Publications() {
                   {selected.abstract ? (
                     <>
                       <Clock className="h-3 w-3" />
-                      {readingTime(selected.abstract)} мин чтения
+                      {getReadingTime(selected.abstract)} чтения
                       <span className="opacity-40">·</span>
-                      <span>{wordCount(selected.abstract)} слов</span>
+                      <span>{getWordCount(selected.abstract)} слов</span>
                     </>
                   ) : (
                     <span className="italic">Аннотация не опубликована</span>
@@ -606,54 +606,7 @@ export function Publications() {
               </div>
 
               {/* Related publications */}
-              {(() => {
-                const related = publications
-                  .filter(
-                    (p) =>
-                      p.id !== selected.id &&
-                      p.categories.some((c) => selected.categories.includes(c))
-                  )
-                  .map((p) => ({
-                    pub: p,
-                    score: p.categories.filter((c) =>
-                      selected.categories.includes(c)
-                    ).length,
-                  }))
-                  .sort((a, b) => b.score - a.score)
-                  .slice(0, 4);
-
-                if (related.length === 0) return null;
-
-                return (
-                  <div className="mt-6 pt-5 border-t border-border/60">
-                    <div className="text-xs uppercase tracking-widest text-accent font-medium mb-3">
-                      Похожие публикации
-                    </div>
-                    <div className="grid sm:grid-cols-2 gap-2">
-                      {related.map(({ pub, score }) => (
-                        <button
-                          key={pub.id}
-                          onClick={() => setSelected(pub)}
-                          className="group text-left p-3 rounded-lg border border-border/60 hover:border-accent/40 hover:bg-muted/40 transition-all"
-                        >
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[10px] text-muted-foreground font-mono">
-                              {formatDate(pub.publicationDate)}
-                            </span>
-                            <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-accent/10 text-accent">
-                              {score}{" "}
-                              {pluralRu(score, ["совпадение", "совпадения", "совпадений"])}
-                            </span>
-                          </div>
-                          <div className="text-xs font-medium leading-snug line-clamp-2 group-hover:text-accent transition-colors">
-                            {pub.title}
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })()}
+              <RelatedPublications selected={selected} onSelect={setSelected} />
             </>
           )}
         </DialogContent>
@@ -662,21 +615,60 @@ export function Publications() {
   );
 }
 
-/** Estimate reading time in minutes for Russian text (~180 wpm). */
-function readingTime(text: string): number {
-  const words = wordCount(text);
-  return Math.max(1, Math.round(words / 180));
-}
+function RelatedPublications({
+  selected,
+  onSelect,
+}: {
+  selected: Publication;
+  onSelect: (p: Publication) => void;
+}) {
+  const related = React.useMemo(() => {
+    return publications
+      .filter(
+        (p) =>
+          p.id !== selected.id &&
+          p.categories.some((c) => selected.categories.includes(c))
+      )
+      .map((p) => ({
+        pub: p,
+        score: p.categories.filter((c) => selected.categories.includes(c))
+          .length,
+      }))
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 4);
+  }, [selected]);
 
-/** Count words in text, handling Cyrillic + Latin + punctuation. */
-function wordCount(text: string): number {
-  if (!text) return 0;
-  // Strip "Аннотация." prefix and similar
-  const cleaned = text.replace(/^Аннотация\.?\s*/i, "");
-  const words = cleaned
-    .split(/[\s,.;:!?()«»""'—–-]+/)
-    .filter((w) => w.length > 0);
-  return words.length;
+  if (related.length === 0) return null;
+
+  return (
+    <div className="mt-6 pt-5 border-t border-border/60">
+      <div className="text-xs uppercase tracking-widest text-accent font-medium mb-3">
+        Похожие публикации
+      </div>
+      <div className="grid sm:grid-cols-2 gap-2">
+        {related.map(({ pub, score }) => (
+          <button
+            key={pub.id}
+            onClick={() => onSelect(pub)}
+            className="group text-left p-3 rounded-lg border border-border/60 hover:border-accent/40 hover:bg-muted/40 transition-all"
+          >
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] text-muted-foreground font-mono">
+                {formatDate(pub.publicationDate)}
+              </span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-accent/10 text-accent">
+                {score}{" "}
+                {pluralRu(score, ["совпадение", "совпадения", "совпадений"])}
+              </span>
+            </div>
+            <div className="text-xs font-medium leading-snug line-clamp-2 group-hover:text-accent transition-colors">
+              {pub.title}
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 /**
@@ -687,10 +679,33 @@ function ModalReadingProgress() {
   const [progress, setProgress] = React.useState(0);
 
   React.useEffect(() => {
+    // Find the scrollable dialog content - prefer the Radix dialog overlay's child
     const dialog = document.querySelector(
-      "[role=\"dialog\"]"
+      "[data-radix-dialog-content]"
     ) as HTMLElement | null;
-    if (!dialog) return;
+
+    if (!dialog) {
+      // Fallback: try role="dialog" and find scrollable child
+      const fallback = document.querySelector("[role='dialog']");
+      const scrollable = fallback?.querySelector("[class*='overflow-y-auto']") as HTMLElement | null;
+      if (!scrollable) return;
+
+      const handler = () => {
+        const scrollTop = scrollable.scrollTop;
+        const scrollHeight = scrollable.scrollHeight - scrollable.clientHeight;
+        const pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        setProgress(Math.min(100, Math.max(0, pct)));
+      };
+
+      handler();
+      scrollable.addEventListener("scroll", handler, { passive: true });
+      const t = setTimeout(handler, 200);
+
+      return () => {
+        scrollable.removeEventListener("scroll", handler);
+        clearTimeout(t);
+      };
+    }
 
     const handler = () => {
       const scrollTop = dialog.scrollTop;
@@ -699,10 +714,8 @@ function ModalReadingProgress() {
       setProgress(Math.min(100, Math.max(0, pct)));
     };
 
-    // Initial
     handler();
     dialog.addEventListener("scroll", handler, { passive: true });
-    // Re-check after content fully renders
     const t = setTimeout(handler, 200);
 
     return () => {

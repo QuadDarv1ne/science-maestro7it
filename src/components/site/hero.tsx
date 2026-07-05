@@ -216,21 +216,36 @@ function PhotoCard() {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [tilt, setTilt] = React.useState({ rx: 0, ry: 0 });
   const [hovered, setHovered] = React.useState(false);
+  const rafRef = React.useRef<number | null>(null);
 
   const handleMouseMove = (e: React.MouseEvent) => {
-    const el = containerRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    // Cap tilt at ±6deg
-    setTilt({ rx: -y * 6, ry: x * 6 });
+    if (rafRef.current) return;
+
+    rafRef.current = requestAnimationFrame(() => {
+      rafRef.current = null;
+      const el = containerRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      setTilt({ rx: -y * 6, ry: x * 6 });
+    });
   };
 
   const handleMouseLeave = () => {
+    if (rafRef.current) {
+      cancelAnimationFrame(rafRef.current);
+      rafRef.current = null;
+    }
     setTilt({ rx: 0, ry: 0 });
     setHovered(false);
   };
+
+  React.useEffect(() => {
+    return () => {
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
 
   return (
     <div

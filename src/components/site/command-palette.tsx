@@ -62,7 +62,9 @@ export function CommandPaletteTrigger() {
       <Search className="h-3.5 w-3.5" />
       <span className="text-xs">Поиск</span>
       <kbd className="inline-flex items-center gap-0.5 h-5 px-1.5 rounded border border-border bg-muted text-[10px] font-mono">
-        {mounted && navigator.platform.toLowerCase().includes("mac") ? (
+        {mounted && typeof navigator !== "undefined" &&
+        (navigator.userAgentData?.platform?.toLowerCase().includes("mac") ||
+         navigator.userAgent.toLowerCase().includes("mac")) ? (
           <>
             <Command className="h-2.5 w-2.5" />K
           </>
@@ -345,6 +347,12 @@ export function CommandPalette() {
                 onKeyDown={handleKeyDown}
                 placeholder="Найти раздел, публикацию, проект, тему…"
                 className="flex-1 bg-transparent py-4 text-sm outline-none placeholder:text-muted-foreground"
+                role="combobox"
+                aria-expanded={open}
+                aria-controls="command-palette-list"
+                aria-activedescendant={filtered[activeIndex] ? `cmd-${filtered[activeIndex].id}` : undefined}
+                aria-label="Поиск по сайту"
+                aria-autocomplete="list"
               />
               <kbd className="hidden sm:inline-flex items-center justify-center h-5 px-1.5 rounded border border-border bg-muted text-[10px] font-mono text-muted-foreground">
                 ESC
@@ -354,6 +362,9 @@ export function CommandPalette() {
             {/* Results */}
             <div
               ref={listRef}
+              id="command-palette-list"
+              role="listbox"
+              aria-label="Результаты поиска"
               className="max-h-[55vh] overflow-y-auto scrollbar-warm p-2"
             >
               {filtered.length === 0 ? (
@@ -372,6 +383,9 @@ export function CommandPalette() {
                       return (
                         <button
                           key={it.id}
+                          id={`cmd-${it.id}`}
+                          role="option"
+                          aria-selected={isActive}
                           onMouseEnter={() => setActiveIndex(idx)}
                           onClick={it.action}
                           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors ${

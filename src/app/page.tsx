@@ -23,7 +23,7 @@ export default function Home() {
       <div className="min-h-screen flex flex-col bg-background text-foreground">
         {/* Skip-to-content link for keyboard users */}
         <a
-          href="#publications"
+          href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-accent focus:text-accent-foreground focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg focus:outline-none"
         >
           Перейти к содержимому
@@ -33,7 +33,7 @@ export default function Home() {
         <ShortcutsHelp />
         <FavoritesPanel />
         <Header />
-        <main className="flex-1">
+        <main id="main-content" className="flex-1">
           <Hero />
           <About />
           <Stats />

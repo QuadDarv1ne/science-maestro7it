@@ -50,6 +50,14 @@ const ICON_MAP: Record<string, LucideIcon> = {
 export function Projects() {
   const [activeCat, setActiveCat] = React.useState<RepoCategory | "all">("all");
 
+  const catCounts = React.useMemo(() => {
+    const map = new Map<RepoCategory, number>();
+    for (const r of repos) {
+      map.set(r.category, (map.get(r.category) || 0) + 1);
+    }
+    return map;
+  }, []);
+
   const filtered = React.useMemo(() => {
     if (activeCat === "all") return repos;
     return repos.filter((r) => r.category === activeCat);
@@ -92,20 +100,15 @@ export function Projects() {
             label="Все проекты"
             count={repos.length}
           />
-          {REPO_CATEGORY_ORDER.filter((c) =>
-            repos.some((r) => r.category === c)
-          ).map((c) => {
-            const count = repos.filter((r) => r.category === c).length;
-            return (
-              <CategoryChip
-                key={c}
-                active={activeCat === c}
-                onClick={() => setActiveCat(c)}
-                label={REPO_CATEGORY_LABELS[c]}
-                count={count}
-              />
-            );
-          })}
+          {REPO_CATEGORY_ORDER.filter((c) => catCounts.has(c)).map((c) => (
+            <CategoryChip
+              key={c}
+              active={activeCat === c}
+              onClick={() => setActiveCat(c)}
+              label={REPO_CATEGORY_LABELS[c]}
+              count={catCounts.get(c) || 0}
+            />
+          ))}
         </div>
 
         {/* Grid */}
@@ -229,6 +232,7 @@ function CategoryChip({
   return (
     <button
       onClick={onClick}
+      aria-pressed={active}
       className={`text-xs px-3 py-1.5 rounded-full border transition-all inline-flex items-center gap-1.5 ${
         active
           ? "bg-accent text-accent-foreground border-accent shadow-sm"
