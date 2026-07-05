@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -81,8 +80,13 @@ export function CommandPalette() {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const listRef = React.useRef<HTMLDivElement>(null);
-  const router = useRouter();
+  const openRef = React.useRef(false);
   const { setTheme } = useTheme();
+
+  // Sync ref with state
+  React.useEffect(() => {
+    openRef.current = open;
+  }, [open]);
 
   // Open via Ctrl+K / Cmd+K or via custom event from trigger button
   React.useEffect(() => {
@@ -91,7 +95,7 @@ export function CommandPalette() {
         e.preventDefault();
         setOpen((o) => !o);
       }
-      if (e.key === "Escape" && open) {
+      if (e.key === "Escape" && openRef.current) {
         setOpen(false);
       }
     };
@@ -102,7 +106,7 @@ export function CommandPalette() {
       window.removeEventListener("keydown", keyHandler);
       window.removeEventListener(OPEN_EVENT, eventHandler);
     };
-  }, [open]);
+  }, []);
 
   // Focus input when opening
   React.useEffect(() => {

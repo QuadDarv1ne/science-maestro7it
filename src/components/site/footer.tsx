@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Github, GraduationCap } from "lucide-react";
 import { OrcidIcon } from "@/components/site/orcid-icon";
-import { author } from "@/data/publications";
+import { publications, author } from "@/data/publications";
 
 export function Footer() {
   return (
@@ -106,7 +106,7 @@ export function Footer() {
 
         <div className="pt-6 border-t border-border/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-muted-foreground">
           <div>
-            © Дуплей Максим Игоревич, 2025. Все права на тексты, графику и сопутствующие
+            © Дуплей Максим Игоревич, {new Date().getFullYear()}. Все права на тексты, графику и сопутствующие
             материалы принадлежат автору.
           </div>
           <div className="flex items-center gap-3 flex-wrap">
@@ -124,7 +124,7 @@ export function Footer() {
 }
 
 function publicationsCount() {
-  return 30;
+  return publications.length;
 }
 
 function BuildTimestamp() {

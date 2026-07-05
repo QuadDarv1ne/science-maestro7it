@@ -7,6 +7,7 @@ import { Bookmark, X, ExternalLink, Trash2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/components/site/favorites-context";
 import { publications } from "@/data/publications";
+import { pluralRu } from "@/lib/utils";
 import { toast } from "sonner";
 
 const OPEN_EVENT = "favorites-panel:open";
@@ -47,11 +48,16 @@ export function FavoritesPanelTrigger() {
 export function FavoritesPanel() {
   const { favorites, removeFavorite, clearFavorites } = useFavorites();
   const [open, setOpen] = React.useState(false);
+  const openRef = React.useRef(false);
+
+  React.useEffect(() => {
+    openRef.current = open;
+  }, [open]);
 
   React.useEffect(() => {
     const handler = () => setOpen(true);
     const escHandler = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && open) setOpen(false);
+      if (e.key === "Escape" && openRef.current) setOpen(false);
     };
     window.addEventListener(OPEN_EVENT, handler);
     window.addEventListener("keydown", escHandler);
@@ -59,7 +65,7 @@ export function FavoritesPanel() {
       window.removeEventListener(OPEN_EVENT, handler);
       window.removeEventListener("keydown", escHandler);
     };
-  }, [open]);
+  }, []);
 
   const favoritePubs = React.useMemo(
     () =>
@@ -207,12 +213,4 @@ export function FavoritesPanel() {
     </AnimatePresence>,
     document.body
   );
-}
-
-function pluralRu(n: number, forms: [string, string, string]): string {
-  const n10 = n % 10;
-  const n100 = n % 100;
-  if (n10 === 1 && n100 !== 11) return forms[0];
-  if (n10 >= 2 && n10 <= 4 && (n100 < 10 || n100 >= 20)) return forms[1];
-  return forms[2];
 }

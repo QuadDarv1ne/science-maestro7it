@@ -1,7 +1,5 @@
 "use client";
 
-import * as React from "react";
-
 /**
  * Lightweight confetti burst using Canvas.
  * No external dependencies — pure DOM + requestAnimationFrame.

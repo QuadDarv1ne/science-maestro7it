@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bookmark, BookmarkCheck, Trash2 } from "lucide-react";
+import { Bookmark, BookmarkCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useFavorites } from "@/components/site/favorites-context";
 import { confettiFromElement } from "@/components/site/confetti";
@@ -90,29 +90,6 @@ export function FavoriteButton({
           В избранное
         </>
       )}
-    </Button>
-  );
-}
-
-/** Button to clear all favorites — used in favorites panel */
-export function ClearFavoritesButton() {
-  const { clearFavorites, count } = useFavorites();
-  if (count === 0) return null;
-
-  const handleClear = () => {
-    clearFavorites();
-    toast.info("Избранное очищено");
-  };
-
-  return (
-    <Button
-      variant="ghost"
-      size="sm"
-      className="text-muted-foreground hover:text-destructive"
-      onClick={handleClear}
-    >
-      <Trash2 className="h-3.5 w-3.5" />
-      Очистить
     </Button>
   );
 }

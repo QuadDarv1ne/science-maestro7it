@@ -1,4 +1,4 @@
-import { publications, author, CATEGORY_LABELS } from "@/data/publications";
+import { publications, author } from "@/data/publications";
 
 /**
  * Structured data (JSON-LD) for SEO.
@@ -19,7 +19,7 @@ export function StructuredData() {
     familyName: "Дуплей",
     jobTitle: "Старший преподаватель информационных технологий",
     description:
-      "Старший преподаватель информационных технологий, аналитик, философ, музыкант и DevOps-инженер. Автор 30 научных публикаций на Zenodo.",
+      `Старший преподаватель информационных технологий, аналитик, философ, музыкант и DevOps-инженер. Автор ${publications.length} научных публикаций на Zenodo.`,
     url: "https://science-maestro7it.ru",
     image: "https://science-maestro7it.ru/author/photo1.png",
     sameAs: [
@@ -55,9 +55,9 @@ export function StructuredData() {
   const articlesSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Научные публикации Дуплея М.И.",
+    name: `Научные публикации ${author.name} (род.)`,
     description:
-      "30 научных публикаций на платформе Zenodo в области ИИ, образования, лингвистики и междисциплинарных исследований.",
+      `${publications.length} научных публикаций на платформе Zenodo в области ИИ, образования, лингвистики и междисциплинарных исследований.`,
     numberOfItems: publications.length,
     itemListElement: publications.map((p, i) => ({
       "@type": "ListItem",
@@ -99,12 +99,12 @@ export function StructuredData() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Science Maestro7IT",
-    alternateName: "Научные публикации Дуплея М.И.",
+    alternateName: `Научные публикации ${author.name}`,
     url: "https://science-maestro7it.ru",
     inLanguage: "ru",
     publisher: {
-      "@type": "Person",
-      "@id": author.orcidUrl,
+      "@type": "Organization",
+      name: "Zenodo",
     },
   };
 
@@ -125,6 +125,3 @@ export function StructuredData() {
     </>
   );
 }
-
-// Avoid unused import warning
-void CATEGORY_LABELS;

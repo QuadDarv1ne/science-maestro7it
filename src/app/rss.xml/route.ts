@@ -40,9 +40,9 @@ export function GET() {
     <title>Science Maestro7IT — Научные публикации Дуплея Максима Игоревича</title>
     <link>${BASE_URL}</link>
     <atom:link href="${BASE_URL}/rss.xml" rel="self" type="application/rss+xml" />
-    <description>30 научных публикаций на Zenodo в области ИИ, образования, лингвистики, международных отношений и радиотехнологий.</description>
+    <description>${publications.length} научных публикаций на Zenodo в области ИИ, образования, лингвистики, международных отношений и радиотехнологий.</description>
     <language>ru-ru</language>
-    <copyright>© Дуплей Максим Игоревич, 2025. Все права принадлежат автору.</copyright>
+    <copyright>© Дуплей Максим Игоревич, ${new Date().getFullYear()}. Все права принадлежат автору.</copyright>
     <managingEditor>Дуплей Максим Игоревич (ORCID: ${author.orcid})</managingEditor>
     <webMaster>Дуплей Максим Игоревич (ORCID: ${author.orcid})</webMaster>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>

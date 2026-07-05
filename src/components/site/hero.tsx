@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import {
   Github,
   GraduationCap,
@@ -12,7 +11,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { author } from "@/data/publications";
+import { publications, author } from "@/data/publications";
 import { ParticleField } from "@/components/site/particle-field";
 import { TypewriterRoles } from "@/components/site/typewriter-roles";
 import { CountUp } from "@/components/site/count-up";
@@ -86,7 +85,7 @@ export function Hero() {
               Старший преподаватель информационных технологий, аналитик, философ,
               музыкант и DevOps-инженер. Автор{" "}
               <span className="text-foreground font-semibold">
-                30 научных публикаций
+                {publications.length} научных публикаций
               </span>{" "}
               на Zenodo в области ИИ, образования, лингвистики и
               междисциплинарных исследований.
@@ -154,7 +153,7 @@ export function Hero() {
             <div className="mt-10 grid grid-cols-3 gap-4 max-w-md">
               <div>
                 <div className="font-serif text-3xl font-bold text-accent">
-                  <CountUp end={30} duration={1800} />
+                  <CountUp end={publications.length} duration={1800} />
                 </div>
                 <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">
                   Публикаций

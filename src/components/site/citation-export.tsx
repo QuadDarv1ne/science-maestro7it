@@ -30,11 +30,10 @@ interface CitationFormat {
 }
 
 const AUTHORS_RU = "Дуплей Максим Игоревич";
-const AUTHORS_EN = "Dupley, M. I.";
-const YEAR = "2026";
+const AUTHORS_EN = "Dupley, Maxim Igorevich";
 
 function getYear(p: Publication): string {
-  return p.publicationDate?.substring(0, 4) || YEAR;
+  return p.publicationDate?.substring(0, 4) || String(new Date().getFullYear());
 }
 
 const FORMATS: CitationFormat[] = [
@@ -92,7 +91,7 @@ ER  - `;
     generate: (p) => {
       const date = new Date(p.publicationDate);
       const months = ["янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
-      return `Дуплей Максим Игоревич ${p.title} [Электронный ресурс] / Максим Игоревич Дуплей. — Электронные данные. — Zenodo, ${date.getDate()} ${months[date.getMonth()]} ${getYear(p)}. — URL: ${p.url} (дата обращения: [указать]). — DOI: ${p.doi}.`;
+      return `${AUTHORS_RU} ${p.title} [Электронный ресурс] / ${AUTHORS_RU}. — Электронные данные. — Zenodo, ${date.getDate()} ${months[date.getMonth()]} ${getYear(p)}. — URL: ${p.url} (дата обращения: [указать]). — DOI: ${p.doi}.`;
     },
   },
   {

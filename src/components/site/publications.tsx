@@ -26,9 +26,11 @@ import {
 } from "@/components/ui/dialog";
 import {
   publications,
+  author,
   type Publication,
   CATEGORY_LABELS,
 } from "@/data/publications";
+import { formatDate, pluralRu } from "@/lib/utils";
 import { ShareMenu } from "@/components/site/share-menu";
 import { CitationExport } from "@/components/site/citation-export";
 import { FeaturedPublications } from "@/components/site/featured-publications";
@@ -586,8 +588,7 @@ export function Publications() {
               </div>
 
               <div className="mt-4 p-3 rounded-lg bg-muted/30 text-xs text-muted-foreground">
-                <strong className="text-foreground">Цитирование (ГОСТ):</strong> Дуплей
-                Максим Игоревич {selected.title} [Электронный ресурс] // Zenodo. —{" "}
+                <strong className="text-foreground">Цитирование (ГОСТ):</strong> {author.name} {selected.title} [Электронный ресурс] // Zenodo. —{" "}
                 {selected.publicationDate}. — URL: {selected.url} (дата
                 обращения: [указать]). — DOI: {selected.doi}. — ORCID:
                 0009-0007-7605-539X.
@@ -648,34 +649,6 @@ export function Publications() {
       </Dialog>
     </section>
   );
-}
-
-function formatDate(iso: string): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  const months = [
-    "янв",
-    "фев",
-    "мар",
-    "апр",
-    "май",
-    "июн",
-    "июл",
-    "авг",
-    "сен",
-    "окт",
-    "ноя",
-    "дек",
-  ];
-  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
-}
-
-function pluralRu(n: number, forms: [string, string, string]): string {
-  const n10 = n % 10;
-  const n100 = n % 100;
-  if (n10 === 1 && n100 !== 11) return forms[0];
-  if (n10 >= 2 && n10 <= 4 && (n100 < 10 || n100 >= 20)) return forms[1];
-  return forms[2];
 }
 
 /** Estimate reading time in minutes for Russian text (~180 wpm). */

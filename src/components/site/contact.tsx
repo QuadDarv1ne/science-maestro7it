@@ -38,11 +38,11 @@ export function Contact() {
   const [copied, setCopied] = React.useState(false);
 
   const copyCitation = () => {
-    const cite = `Дуплей Максим Игоревич. Научные публикации [Электронный ресурс] // Zenodo. — 2026. — URL: https://zenodo.org/search?q=metadata.creators.person_or_org.name%3A%22Dupley%2C+Maxim%22 — ORCID: 0009-0007-7605-539X.`;
+    const cite = `Дуплей Максим Игоревич. Научные публикации [Электронный ресурс] // Zenodo. — ${new Date().getFullYear()}. — URL: https://zenodo.org/search?q=metadata.creators.person_or_org.name%3A%22Dupley%2C+Maxim%22 — ORCID: 0009-0007-7605-539X.`;
     navigator.clipboard.writeText(cite).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    });
+    }).catch(() => {});
   };
 
   return (
@@ -128,7 +128,7 @@ export function Contact() {
 [Электронный ресурс] // Zenodo. — 2026.
 URL: https://zenodo.org
 ORCID: 0009-0007-7605-539X
-© Дуплей Максим Игоревич, 2025`}
+© Дуплей Максим Игоревич, ${new Date().getFullYear()}`}
               </pre>
               <Button
                 size="sm"
@@ -142,7 +142,7 @@ ORCID: 0009-0007-7605-539X
             </div>
 
             <div className="text-xs text-muted-foreground leading-relaxed">
-              <strong className="text-foreground">© Дуплей Максим Игоревич, 2025.</strong>{" "}
+              <strong className="text-foreground">© Дуплей Максим Игоревич, {new Date().getFullYear()}.</strong>{" "}
               Все права на тексты, графику и сопутствующие материалы принадлежат
               автору.
             </div>

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star, ExternalLink, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { publications, type Publication } from "@/data/publications";
+import { formatDate } from "@/lib/utils";
 
 /**
  * Featured publications carousel — highlights the most recent works
@@ -121,14 +122,4 @@ export function FeaturedPublications({
       </div>
     </div>
   );
-}
-
-function formatDate(iso: string): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  const months = [
-    "янв", "фев", "мар", "апр", "май", "июн",
-    "июл", "авг", "сен", "окт", "ноя", "дек",
-  ];
-  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }

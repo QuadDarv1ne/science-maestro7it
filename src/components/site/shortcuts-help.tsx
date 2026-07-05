@@ -66,12 +66,13 @@ const SHORTCUTS: Shortcut[] = [
 
 const OPEN_EVENT = "shortcuts-help:open";
 
-export function ShortcutsHelpTrigger() {
-  return null; // Trigger is via keyboard "?" only
-}
-
 export function ShortcutsHelp() {
   const [open, setOpen] = React.useState(false);
+  const openRef = React.useRef(false);
+
+  React.useEffect(() => {
+    openRef.current = open;
+  }, [open]);
 
   React.useEffect(() => {
     const keyHandler = (e: KeyboardEvent) => {
@@ -85,7 +86,7 @@ export function ShortcutsHelp() {
         e.preventDefault();
         setOpen((o) => !o);
       }
-      if (e.key === "Escape" && open) {
+      if (e.key === "Escape" && openRef.current) {
         setOpen(false);
       }
     };
@@ -96,7 +97,7 @@ export function ShortcutsHelp() {
       window.removeEventListener("keydown", keyHandler);
       window.removeEventListener(OPEN_EVENT, eventHandler);
     };
-  }, [open]);
+  }, []);
 
   if (typeof document === "undefined") return null;
 

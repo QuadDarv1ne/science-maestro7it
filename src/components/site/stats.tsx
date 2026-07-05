@@ -87,7 +87,7 @@ export function Stats() {
             value={Object.keys(categoryCounts).length}
             label="Направлений"
           />
-          <StatBlock value={2026} label="Год активной публикации" />
+          <StatBlock value={new Date().getFullYear()} label="Год активной публикации" />
           <StatBlock value="1" label="Автор · ORCID" />
         </div>
 

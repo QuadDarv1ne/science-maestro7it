@@ -4,20 +4,14 @@
 	}
 
 	handle @transform_port_query {
-		reverse_proxy localhost:{query.XTransformPort} {
-			header_up Host {host}
-			header_up X-Forwarded-For {remote_host}
-			header_up X-Forwarded-Proto {scheme}
-			header_up X-Real-IP {remote_host}
-		}
+		@valid_port `{query.XTransformPort} in {"3000","3001","8080","8443"}`
+		redir @valid_port /{query} {uri}
+	 respond "Forbidden" 403
 	}
 
-	handle {
-		reverse_proxy localhost:3000 {
-			header_up Host {host}
-			header_up X-Forwarded-For {remote_host}
-			header_up X-Forwarded-Proto {scheme}
-			header_up X-Real-IP {remote_host}
-		}
+	encode gzip
+
+	reverse_proxy localhost:3000 {
+		header_up Host {host}
 	}
 }
