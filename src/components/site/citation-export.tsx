@@ -29,7 +29,7 @@ interface CitationFormat {
   generate: (p: Publication) => string;
 }
 
-const AUTHORS_RU = "Дуплей М.И.";
+const AUTHORS_RU = "Дуплей Максим Игоревич";
 const AUTHORS_EN = "Dupley, M. I.";
 const YEAR = "2026";
 
@@ -92,7 +92,7 @@ ER  - `;
     generate: (p) => {
       const date = new Date(p.publicationDate);
       const months = ["янв", "фев", "мар", "апр", "май", "июн", "июл", "авг", "сен", "окт", "ноя", "дек"];
-      return `Дуплей М.И. ${p.title} [Электронный ресурс] / М.И. Дуплей. — Электронные данные. — Zenodo, ${date.getDate()} ${months[date.getMonth()]} ${getYear(p)}. — URL: ${p.url} (дата обращения: [указать]). — DOI: ${p.doi}.`;
+      return `Дуплей Максим Игоревич ${p.title} [Электронный ресурс] / Максим Игоревич Дуплей. — Электронные данные. — Zenodo, ${date.getDate()} ${months[date.getMonth()]} ${getYear(p)}. — URL: ${p.url} (дата обращения: [указать]). — DOI: ${p.doi}.`;
     },
   },
   {

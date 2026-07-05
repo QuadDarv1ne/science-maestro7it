@@ -1,8 +1,8 @@
-# Science Maestro7IT — Научные публикации Дуплея М.И.
+# Science Maestro7IT — Научные публикации Дуплея Максима Игоревича
 
 > **Science Maestro7IT** — персональный сайт-портфолио для демонстрации научных работ, проектов и профессиональной деятельности Дуплея Максима Игоревича. Часть образовательной экосистемы [Maestro7IT](https://school-maestro7it.ru/).
 
-[![Author](https://img.shields.io/badge/author-Дуплей%20М.И.-f7a224?style=flat-square)](https://orcid.org/0009-0007-7605-539X)
+[![Author](https://img.shields.io/badge/author-Дуплей%20Максим%20Игоревич-f7a224?style=flat-square)](https://orcid.org/0009-0007-7605-539X)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0007--7605--539X-a6ce39?style=flat-square&logo=orcid)](https://orcid.org/0009-0007-7605-539X)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
@@ -249,7 +249,7 @@ python3 scripts/gen_repos_ts.py
 
 ## Авторские права
 
-**© Дуплей М.И., 2025.** Все права на тексты, графику и сопутствующие материалы принадлежат автору.
+**© Дуплей Максим Игоревич, 2025.** Все права на тексты, графику и сопутствующие материалы принадлежат автору.
 
 При любом использовании (в том числе некоммерческом) требуется прямая ссылка на оригинальную публикацию и указание автора:
 
@@ -259,7 +259,7 @@ python3 scripts/gen_repos_ts.py
 
 **Цитирование:**
 
-> Дуплей М.И. Научные публикации [Электронный ресурс] // Zenodo. — 2026. — URL: https://zenodo.org. — ORCID: 0009-0007-7605-539X.
+> Дуплей Максим Игоревич. Научные публикации [Электронный ресурс] // Zenodo. — 2026. — URL: https://zenodo.org. — ORCID: 0009-0007-7605-539X.
 
 ## Лицензия на исходный код сайта
 

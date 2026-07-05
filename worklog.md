@@ -1,4 +1,4 @@
-# Worklog — Дуплей М.И. Scientific Publications Website
+# Worklog — Дуплей Максим Игоревич Scientific Publications Website
 
 ---
 Task ID: 1

@@ -89,7 +89,7 @@ export function About() {
             материалы принадлежат автору.»
           </p>
           <footer className="mt-4 pl-8 text-sm text-muted-foreground">
-            © Дуплей М.И., 2025 · ORCID: 0009-0007-7605-539X
+            © Дуплей Максим Игоревич, 2025 · ORCID: 0009-0007-7605-539X
           </footer>
         </motion.blockquote>
 

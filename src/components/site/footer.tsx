@@ -106,7 +106,7 @@ export function Footer() {
 
         <div className="pt-6 border-t border-border/60 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-muted-foreground">
           <div>
-            © Дуплей М.И., 2025. Все права на тексты, графику и сопутствующие
+            © Дуплей Максим Игоревич, 2025. Все права на тексты, графику и сопутствующие
             материалы принадлежат автору.
           </div>
           <div className="flex items-center gap-3 flex-wrap">

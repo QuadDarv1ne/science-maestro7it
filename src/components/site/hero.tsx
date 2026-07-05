@@ -271,7 +271,7 @@ function PhotoCard() {
             <div className="text-xs uppercase tracking-widest opacity-80">
               Автор
             </div>
-            <div className="font-serif text-lg font-semibold">Дуплей М.И.</div>
+            <div className="font-serif text-lg font-semibold">Дуплей Максим Игоревич</div>
           </div>
         </div>
 

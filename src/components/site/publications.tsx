@@ -587,7 +587,7 @@ export function Publications() {
 
               <div className="mt-4 p-3 rounded-lg bg-muted/30 text-xs text-muted-foreground">
                 <strong className="text-foreground">Цитирование (ГОСТ):</strong> Дуплей
-                М.И. {selected.title} [Электронный ресурс] // Zenodo. —{" "}
+                Максим Игоревич {selected.title} [Электронный ресурс] // Zenodo. —{" "}
                 {selected.publicationDate}. — URL: {selected.url} (дата
                 обращения: [указать]). — DOI: {selected.doi}. — ORCID:
                 0009-0007-7605-539X.

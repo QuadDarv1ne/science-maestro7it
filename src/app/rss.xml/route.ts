@@ -37,12 +37,12 @@ export function GET() {
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>Science Maestro7IT — Научные публикации Дуплея М.И.</title>
+    <title>Science Maestro7IT — Научные публикации Дуплея Максима Игоревича</title>
     <link>${BASE_URL}</link>
     <atom:link href="${BASE_URL}/rss.xml" rel="self" type="application/rss+xml" />
     <description>30 научных публикаций на Zenodo в области ИИ, образования, лингвистики, международных отношений и радиотехнологий.</description>
     <language>ru-ru</language>
-    <copyright>© Дуплей М.И., 2025. Все права принадлежат автору.</copyright>
+    <copyright>© Дуплей Максим Игоревич, 2025. Все права принадлежат автору.</copyright>
     <managingEditor>Дуплей Максим Игоревич (ORCID: ${author.orcid})</managingEditor>
     <webMaster>Дуплей Максим Игоревич (ORCID: ${author.orcid})</webMaster>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
