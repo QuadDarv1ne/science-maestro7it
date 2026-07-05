@@ -42,7 +42,7 @@
 | Иконки | Lucide React |
 | Анимации | Framer Motion |
 | Шрифты | Geist Sans/Mono + Playfair Display (кириллица) |
-| Темизация | next-themes (5 пользовательских тем) |
+| Темизация | next-themes (9 тем: светлая, тёмная, фиолетовая, океан, лес, закат, контраст, авто и др.) |
 | Инструменты | Bun, ESLint, PostCSS |
 
 ## Структура проекта
@@ -58,9 +58,13 @@
 │   └── logo.svg
 ├── src/
 │   ├── app/
-│   │   ├── globals.css              # 5 тем + print styles
+│   │   ├── globals.css              # 9 тем + print styles + fluid typography
 │   │   ├── layout.tsx               # Метаданные, шрифты, ThemeProvider
-│   │   └── page.tsx                 # Главная страница
+│   │   ├── not-found.tsx            # Кастомная 404 страница
+│   │   ├── page.tsx                 # Главная страница
+│   │   ├── robots.ts                # Динамический robots.txt
+│   │   ├── sitemap.ts               # Динамический sitemap
+│   │   └── rss.xml/route.ts         # RSS-фид публикаций
 │   ├── components/
 │   │   ├── site/                    # Кастомные компоненты сайта
 │   │   │   ├── header.tsx           # Шапка с навигацией
@@ -72,37 +76,46 @@
 │   │   │   ├── projects.tsx         # 14 проектов
 │   │   │   ├── contact.tsx          # Контакты и цитирование
 │   │   │   ├── footer.tsx
-│   │   │   ├── theme-provider.tsx   # 5 тем оформления
+│   │   │   ├── theme-provider.tsx   # 9 тем оформления
 │   │   │   ├── theme-switcher.tsx   # Dropdown переключатель тем
 │   │   │   ├── command-palette.tsx  # Ctrl+K командная палитра
 │   │   │   ├── particle-field.tsx   # Canvas-анимация созвездия
 │   │   │   ├── scroll-enhancements.tsx  # Progress bar + back-to-top
 │   │   │   ├── share-menu.tsx       # Telegram/VK/X/Copy
+│   │   │   ├── citation-export.tsx  # BibTeX/RIS/APA/GOST экспорт
+│   │   │   ├── favorite-button.tsx  # Кнопка избранного
+│   │   │   ├── favorites-context.tsx # Контекст избранного (localStorage)
+│   │   │   ├── favorites-panel.tsx  # Панель избранного
+│   │   │   ├── featured-publications.tsx  # Карусель избранных
 │   │   │   └── orcid-icon.tsx
 │   │   └── ui/                      # shadcn/ui компоненты (45+)
 │   ├── data/
 │   │   ├── publications.ts          # 30 публикаций Zenodo
 │   │   └── repos.ts                 # 14 проектов GitHub
-│   ├── hooks/
-│   ├── lib/
-│   └── ...
+│   └── lib/
+│       ├── config.ts                # Конфигурация сайта
+│       └── utils.ts                 # Утилиты (cn, formatDate, pluralRu)
 ├── scripts/                         # Python-скрипты генерации данных
 │   ├── fetch_zenodo.py              # Загрузка метаданных с Zenodo API
 │   ├── gen_publications_ts.py       # Генерация publications.ts
 │   ├── fetch_github_repos.py        # Загрузка метаданных с GitHub API
 │   ├── gen_repos_ts.py              # Генерация repos.ts
-│   ├── zenodo_data.json             # Сырые данные Zenodo
-│   └── github_repos.json            # Сырые данные GitHub
-├── prisma/
+│   ├── zenodo_data.json             # Сырые данные Zenodo (gitignored)
+│   └── github_repos.json            # Сырые данные GitHub (gitignored)
 ├── next.config.ts
 ├── package.json
 ├── tsconfig.json
-├── tailwind.config.ts
 ├── postcss.config.mjs
 ├── eslint.config.mjs
 ├── components.json                  # Конфигурация shadcn/ui
 └── README.md
 ```
+
+## RSS-фид
+
+Сайт предоставляет RSS 2.0 фид со всеми публикациями: `https://science-maestro7it.ru/rss.xml`
+
+Автоматическое обнаружение через `<link rel="alternate">` тег в HTML `<head>`.
 
 ## Установка и запуск
 
@@ -156,19 +169,22 @@ bun run lint
 6. **Проекты** — 14 проектов в 7 категориях с фильтрами и live-счётчиками
 7. **Контакты** — карточка профилей (ORCID, GitHub, Stepik, Maestro7IT) + карточка цитирования с кнопкой «Копировать»
 
-### 5 тем оформления
+### 9 тем оформления
 
-Переключаются через dropdown в шапке или командную палитру:
+Переключаются через dropdown в шапке или командную палитру (Ctrl/Cmd+K):
 
 | Тема | Фон | Акцент |
 |------|-----|--------|
 | **Светлая** | Кремовый | Янтарный |
 | **Тёмная** | Угольный | Янтарный |
 | **Фиолетовая** | Индиго | Лавандовый |
-| **Оранжевая** | Кофейный | Ярко-оранжевый |
 | **Океан** | Тёмно-синий | Бирюзовый |
+| **Лес** | Тёмно-зелёный | Изумрудный |
+| **Закат** | Тёплый коричневый | Оранжевый |
+| **Контраст** | Чистый чёрный | Яркий белый |
+| **Авто** | Системные настройки | — |
 
-Выбор сохраняется в localStorage.
+Выбор сохраняется в localStorage. Поддерживается системная тема через `prefers-color-scheme`.
 
 ### Интерактивность
 
@@ -178,7 +194,12 @@ bun run lint
 - **Индикатор прогресса прокрутки** — тонкая полоска вверху страницы
 - **Кнопка «Наверх»** — появляется после прокрутки на 80% высоты экрана
 - **Поделиться публикацией** — Telegram, VK, X (Twitter), копирование ссылки
+- **Избранное** — добавляйте публикации в избранное, просматривайте в отдельной панели
+- **Экспорт цитирований** — BibTeX, RIS, APA, GOST, MLA, Chicago
+- **Полная навигация** — горячие клавиши для всех секций, быстрый доступ к проектам
 - **Print-friendly** — `Ctrl/Cmd+P` даёт чистую библиографию без декора
+- **RSS-фид** — подписывайтесь на обновления через `/rss.xml`
+- **SEO-оптимизация** — JSON-LD структурированные данные, OG/Twitter карточки, sitemap
 
 ### Адаптивность
 
@@ -249,7 +270,7 @@ python3 scripts/gen_repos_ts.py
 
 ## Авторские права
 
-**© Дуплей Максим Игоревич, 2025.** Все права на тексты, графику и сопутствующие материалы принадлежат автору.
+**© Дуплей Максим Игоревич, 2024–2026.** Все права на тексты, графику и сопутствующие материалы принадлежат автору.
 
 При любом использовании (в том числе некоммерческом) требуется прямая ссылка на оригинальную публикацию и указание автора:
 

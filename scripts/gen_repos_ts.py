@@ -2,8 +2,12 @@
 """Generate repos.ts from github_repos.json with categories and curated descriptions."""
 import json
 import re
+import os
 
-with open('/home/z/my-project/scripts/github_repos.json', 'r', encoding='utf-8') as f:
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+
+with open(os.path.join(SCRIPT_DIR, 'github_repos.json'), 'r', encoding='utf-8') as f:
     repos = json.load(f)
 
 # Curated descriptions + categories for each repo (based on README content + repo name)
@@ -221,7 +225,7 @@ for e in entries:
     lines.append("  },")
 lines.append("];")
 
-out_path = '/home/z/my-project/src/data/repos.ts'
+out_path = os.path.join(PROJECT_ROOT, 'src', 'data', 'repos.ts')
 with open(out_path, 'w', encoding='utf-8') as f:
     f.write("\n".join(lines))
 

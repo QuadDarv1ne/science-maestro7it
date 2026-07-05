@@ -57,13 +57,16 @@ def fetch_record(rid: int) -> dict:
     except Exception as e:
         return {'id': rid, 'error': str(e)}
 
+import os
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 results = []
 for rid in RECORD_IDS:
     print(f"Fetching {rid}...", flush=True)
     rec = fetch_record(rid)
     results.append(rec)
 
-out_path = '/home/z/my-project/scripts/zenodo_data.json'
+out_path = os.path.join(SCRIPT_DIR, 'zenodo_data.json')
 with open(out_path, 'w', encoding='utf-8') as f:
     json.dump(results, f, ensure_ascii=False, indent=2)
 

@@ -11,7 +11,8 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { publications, author } from "@/data/publications";
+import { publications, author, CATEGORY_LABELS } from "@/data/publications";
+import { repos } from "@/data/repos";
 import { ParticleField } from "@/components/site/particle-field";
 import { TypewriterRoles } from "@/components/site/typewriter-roles";
 import { CountUp } from "@/components/site/count-up";
@@ -161,7 +162,7 @@ export function Hero() {
               </div>
               <div>
                 <div className="font-serif text-3xl font-bold text-accent">
-                  <CountUp end={9} duration={1500} />
+                  <CountUp end={Object.keys(CATEGORY_LABELS).length} duration={1500} />
                 </div>
                 <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">
                   Тем
@@ -169,7 +170,7 @@ export function Hero() {
               </div>
               <div>
                 <div className="font-serif text-3xl font-bold text-accent">
-                  <CountUp end={14} duration={1600} />
+                  <CountUp end={repos.length} duration={1600} />
                 </div>
                 <div className="text-xs text-muted-foreground uppercase tracking-wider mt-1">
                   Проектов
@@ -301,7 +302,7 @@ function PhotoCard() {
             ORCID
           </div>
           <div className="font-mono text-xs font-bold">
-            0009-0007-7605-539X
+            {author.orcid}
           </div>
         </motion.div>
       </motion.div>

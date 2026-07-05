@@ -1,4 +1,5 @@
 import { publications, author } from "@/data/publications";
+import { SITE_URL } from "@/lib/config";
 
 /**
  * Structured data (JSON-LD) for SEO.
@@ -20,8 +21,8 @@ export function StructuredData() {
     jobTitle: "Старший преподаватель информационных технологий",
     description:
       `Старший преподаватель информационных технологий, аналитик, философ, музыкант и DevOps-инженер. Автор ${publications.length} научных публикаций на Zenodo.`,
-    url: "https://science-maestro7it.ru",
-    image: "https://science-maestro7it.ru/author/photo1.png",
+    url: SITE_URL,
+    image: `${SITE_URL}/author/photo1.png`,
     sameAs: [
       author.orcidUrl,
       author.github,
@@ -100,7 +101,7 @@ export function StructuredData() {
     "@type": "WebSite",
     name: "Science Maestro7IT",
     alternateName: `Научные публикации ${author.name}`,
-    url: "https://science-maestro7it.ru",
+    url: SITE_URL,
     inLanguage: "ru",
     publisher: {
       "@type": "Organization",

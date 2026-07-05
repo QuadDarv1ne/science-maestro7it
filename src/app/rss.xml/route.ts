@@ -1,8 +1,7 @@
 import { publications, author } from "@/data/publications";
+import { SITE_URL } from "@/lib/config";
 
 export const dynamic = "force-static";
-
-const BASE_URL = "https://science-maestro7it.ru";
 
 function escapeXml(s: string): string {
   return s
@@ -38,8 +37,8 @@ export function GET() {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>Science Maestro7IT — Научные публикации Дуплея Максима Игоревича</title>
-    <link>${BASE_URL}</link>
-    <atom:link href="${BASE_URL}/rss.xml" rel="self" type="application/rss+xml" />
+    <link>${SITE_URL}</link>
+    <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
     <description>${publications.length} научных публикаций на Zenodo в области ИИ, образования, лингвистики, международных отношений и радиотехнологий.</description>
     <language>ru-ru</language>
     <copyright>© Дуплей Максим Игоревич, ${new Date().getFullYear()}. Все права принадлежат автору.</copyright>
@@ -48,9 +47,9 @@ export function GET() {
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <generator>Science Maestro7IT — Next.js 16</generator>
     <image>
-      <url>${BASE_URL}/favicon.svg</url>
+      <url>${SITE_URL}/favicon.svg</url>
       <title>Science Maestro7IT</title>
-      <link>${BASE_URL}</link>
+      <link>${SITE_URL}</link>
     </image>
 ${items}
   </channel>

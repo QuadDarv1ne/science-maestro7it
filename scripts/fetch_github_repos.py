@@ -4,6 +4,7 @@ import json
 import subprocess
 import re
 import time
+import os
 
 ALL_REPOS = [
     "QuadDarv1ne/via-antiqua-history",
@@ -71,9 +72,10 @@ def fetch_repo(full_name, retries=3):
     return {'full_name': full_name, 'error': 'rate limited after retries'}
 
 # Load existing
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 existing = {}
 try:
-    with open('/home/z/my-project/scripts/github_repos.json', 'r', encoding='utf-8') as f:
+    with open(os.path.join(SCRIPT_DIR, 'github_repos.json'), 'r', encoding='utf-8') as f:
         for r in json.load(f):
             fn = r.get('full_name', '')
             if fn and not r.get('error') and r.get('name'):
@@ -92,7 +94,7 @@ for full_name in ALL_REPOS:
     results.append(r)
     time.sleep(3)  # be polite
 
-out_path = '/home/z/my-project/scripts/github_repos.json'
+out_path = os.path.join(SCRIPT_DIR, 'github_repos.json')
 with open(out_path, 'w', encoding='utf-8') as f:
     json.dump(results, f, ensure_ascii=False, indent=2)
 
