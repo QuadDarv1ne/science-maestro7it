@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.gitignore
+*.md
+dev.log
+server.log
+.env*
+local-*
+.claude
+.z-ai-config
+scripts/*.py
+scripts/*.json
