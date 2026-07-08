@@ -362,7 +362,7 @@ export function Publications() {
           </div>
 
           {/* Result count */}
-          <div className="text-sm text-muted-foreground">
+          <div className="text-sm text-muted-foreground" aria-live="polite" aria-atomic="true">
             Найдено:{" "}
             <span className="text-foreground font-semibold">
               {filtered.length}
@@ -416,15 +416,13 @@ export function Publications() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="font-serif font-semibold text-lg leading-snug mb-3 line-clamp-3 group-hover:text-accent transition-colors">
-                    <button
-                      onClick={() => setSelected(p)}
-                      className="text-left"
-                      aria-label={`Открыть: ${p.title}`}
-                    >
-                      {p.title}
-                    </button>
-                  </h3>
+                  <button
+                    onClick={() => setSelected(p)}
+                    className="font-serif font-semibold text-lg leading-snug mb-3 line-clamp-3 group-hover:text-accent transition-colors text-left"
+                    aria-label={`Открыть: ${p.title}`}
+                  >
+                    {p.title}
+                  </button>
 
                   {/* Category badges */}
                   <div className="flex flex-wrap gap-1.5 mb-3">

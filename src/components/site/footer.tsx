@@ -1,9 +1,19 @@
 "use client";
 
-import * as React from "react";
 import { Github, GraduationCap } from "lucide-react";
 import { OrcidIcon } from "@/components/site/orcid-icon";
 import { publications, author } from "@/data/publications";
+
+const BUILD_TIMESTAMP = (() => {
+  const now = new Date();
+  const months = [
+    "янв", "фев", "мар", "апр", "май", "июн",
+    "июл", "авг", "сен", "окт", "ноя", "дек",
+  ];
+  const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+  const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+  return `${dateStr} ${timeStr}`;
+})();
 
 export function Footer() {
   return (
@@ -111,37 +121,14 @@ export function Footer() {
           </div>
           <div className="flex items-center gap-3 flex-wrap">
             <span>
-              <span className="font-mono">{publicationsCount()}</span>{" "}
+              <span className="font-mono">{publications.length}</span>{" "}
               публикаций · ORCID {author.orcid}
             </span>
             <span className="opacity-40">·</span>
-            <BuildTimestamp />
+            <span className="font-mono">обновлено: {BUILD_TIMESTAMP}</span>
           </div>
         </div>
       </div>
     </footer>
-  );
-}
-
-function publicationsCount() {
-  return publications.length;
-}
-
-function BuildTimestamp() {
-  const timestamp = React.useMemo(() => {
-    const now = new Date();
-    const months = [
-      "янв", "фев", "мар", "апр", "май", "июн",
-      "июл", "авг", "сен", "окт", "ноя", "дек",
-    ];
-    const dateStr = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-    const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
-    return `${dateStr} ${timeStr}`;
-  }, []);
-
-  return (
-    <span className="font-mono">
-      обновлено: {timestamp}
-    </span>
   );
 }

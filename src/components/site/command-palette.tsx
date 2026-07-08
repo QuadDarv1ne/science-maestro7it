@@ -63,7 +63,7 @@ export function CommandPaletteTrigger() {
       <span className="text-xs">Поиск</span>
       <kbd className="inline-flex items-center gap-0.5 h-5 px-1.5 rounded border border-border bg-muted text-[10px] font-mono">
         {mounted && typeof navigator !== "undefined" &&
-        (navigator.userAgentData?.platform?.toLowerCase().includes("mac") ||
+        ((navigator as Navigator & { userAgentData?: { platform?: string } }).userAgentData?.platform?.toLowerCase().includes("mac") ||
          navigator.userAgent.toLowerCase().includes("mac")) ? (
           <>
             <Command className="h-2.5 w-2.5" />K
@@ -93,7 +93,13 @@ export function CommandPalette() {
   // Open via Ctrl+K / Cmd+K or via custom event from trigger button
   React.useEffect(() => {
     const keyHandler = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement;
+      const isTyping =
+        target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable;
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        if (isTyping) return;
         e.preventDefault();
         setOpen((o) => !o);
       }

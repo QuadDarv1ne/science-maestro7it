@@ -82,7 +82,7 @@ export function ShortcutsHelp() {
         target.tagName === "TEXTAREA" ||
         target.isContentEditable;
       if (isTyping) return;
-      if (e.key === "?" || (e.key === "/" && e.shiftKey)) {
+      if (e.key === "?") {
         e.preventDefault();
         setOpen((o) => !o);
       }

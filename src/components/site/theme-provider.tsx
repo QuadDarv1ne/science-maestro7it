@@ -29,7 +29,6 @@ export function ThemeProvider({
       disableTransitionOnChange
       themes={AVAILABLE_THEMES.filter((t) => t.id !== "auto").map((t) => t.id)}
       value={{
-        auto: typeof window !== "undefined" && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark",
         light: "light",
         dark: "dark",
         purple: "purple",

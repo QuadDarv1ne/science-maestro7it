@@ -16,7 +16,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 ENV HOST=0.0.0.0
-ENV DATABASE_URL=/data/science-maestro.db
+ENV DATABASE_URL="file:/data/science-maestro.db"
 
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static

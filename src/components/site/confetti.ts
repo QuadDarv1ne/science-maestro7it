@@ -27,7 +27,7 @@ let canvas: HTMLCanvasElement | null = null;
 let ctx: CanvasRenderingContext2D | null = null;
 let particles: Particle[] = [];
 let raf = 0;
-let lastCleanup = 0;
+let cleanupTimer: ReturnType<typeof setTimeout> | null = null;
 
 function ensureCanvas() {
   if (canvas) return;
@@ -38,6 +38,16 @@ function ensureCanvas() {
   ctx = canvas.getContext("2d");
   resize();
   window.addEventListener("resize", resize);
+}
+
+function cleanupCanvas() {
+  if (canvas) {
+    canvas.remove();
+    canvas = null;
+    ctx = null;
+  }
+  window.removeEventListener("resize", resize);
+  cleanupTimer = null;
 }
 
 function resize() {
@@ -101,12 +111,8 @@ function draw() {
   } else {
     cancelAnimationFrame(raf);
     raf = 0;
-    // Clean up canvas after idle period
-    if (now - lastCleanup > 2000 && canvas) {
-      canvas.remove();
-      canvas = null;
-      ctx = null;
-      window.removeEventListener("resize", resize);
+    if (!cleanupTimer) {
+      cleanupTimer = setTimeout(cleanupCanvas, 2000);
     }
   }
 }
@@ -159,7 +165,10 @@ export function confetti(options: ConfettiOptions = {}) {
   }
   particles.push(...newParticles);
 
-  lastCleanup = performance.now();
+  if (cleanupTimer) {
+    clearTimeout(cleanupTimer);
+    cleanupTimer = null;
+  }
   if (!raf) {
     raf = requestAnimationFrame(draw);
   }
