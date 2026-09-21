@@ -1,18 +1,64 @@
 #!/bin/sh
-# Auto-push current branch to ALL remotes (origin, amvera, ...) after each commit.
-# Enabled via: git config core.hooksPath .githooks
-# To skip a single commit:  git commit --no-verify
+# .githooks/post-commit — автоотправка нового коммита во ВСЕ настроенные remote
+# (origin = GitHub, amvera = Amvera SaaS и любые добавленные позже).
+#
+# Поведение:
+#   * пуш текущей ветки в каждый remote; список remote'ов читается динамически —
+#     новые добавляются через `git remote add`, хук подхватит их сам;
+#   * успех — тихо, ошибка — предупреждение в stderr + запись в .git/auto-push.log;
+#   * пропуск на detached HEAD и во время rebase / cherry-pick / merge / bisect /
+#     revert, чтобы не отправлять промежуточные коммиты;
+#   * разовый отказ от пуша: SKIP_AUTO_PUSH=1 git commit -m "...".
+#
+# Установка (один раз на клон; автоматически выполняется при `npm install`):
+#   git config core.hooksPath .githooks
 
-branch=$(git symbolic-ref --quiet --short HEAD) || exit 0
+set -u
 
-for remote in $(git remote); do
-  echo "[post-commit] pushing '$branch' -> '$remote'..."
-  if git push --quiet "$remote" "HEAD:refs/heads/$branch"; then
-    echo "[post-commit] '$remote' updated"
-  else
-    echo "[post-commit] ERROR: push to '$remote' failed." >&2
-    echo "[post-commit] fix manually: git push $remote $branch" >&2
+# --- ручной отказ ----------------------------------------------------------
+if [ "${SKIP_AUTO_PUSH:-0}" = "1" ]; then
+  exit 0
+fi
+
+# Не ждать ввода логина/пароля, если аутентификация не прошла сама.
+GIT_TERMINAL_PROMPT=0
+export GIT_TERMINAL_PROMPT
+
+git_dir=$(git rev-parse --absolute-git-dir 2>/dev/null) || exit 0
+
+# Detached HEAD (checkout коммита, бисект) — пушить некуда.
+branch=$(git symbolic-ref --quiet --short HEAD 2>/dev/null) || exit 0
+
+remotes=$(git remote 2>/dev/null)
+[ -n "$remotes" ] || exit 0
+
+# --- не пушить промежуточные коммиты многосоставных операций --------------
+for marker in rebase-merge rebase-apply CHERRY_PICK_HEAD MERGE_HEAD BISECT_LOG REVERT_HEAD; do
+  if [ -e "$git_dir/$marker" ]; then
+    exit 0
   fi
 done
+
+log="$git_dir/auto-push.log"
+timeout_cmd=""
+if command -v timeout >/dev/null 2>&1; then
+  timeout_cmd="timeout 90"
+fi
+
+failed=""
+for remote in $remotes; do
+  # shellcheck disable=SC2086
+  if $timeout_cmd git push --quiet "$remote" "$branch" >>"$log" 2>&1; then
+    echo "$(date '+%Y-%m-%d %H:%M:%S') OK   $remote/$branch" >>"$log"
+  else
+    echo "$(date '+%Y-%m-%d %H:%M:%S') FAIL $remote/$branch" >>"$log"
+    failed="$failed $remote"
+  fi
+done
+
+if [ -n "$failed" ]; then
+  echo "post-commit: автопуш НЕ выполнен в:$failed (подробности: $log)" >&2
+  echo "post-commit: повторить вручную — git push --all && git push --tags" >&2
+fi
 
 exit 0
