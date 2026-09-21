@@ -1,6 +1,6 @@
-# Science Maestro7IT — Научные публикации Дуплея Максима Игоревича
+# Science Maestro7IT — Научные публикации Дуплей Максима Игоревича
 
-> **Science Maestro7IT** — персональный сайт-портфолио для демонстрации научных работ, проектов и профессиональной деятельности Дуплея Максима Игоревича. Часть образовательной экосистемы [Maestro7IT](https://school-maestro7it.ru/).
+> **Science Maestro7IT** — персональный сайт-портфолио для демонстрации научных работ, проектов и профессиональной деятельности Дуплей Максима Игоревича. Часть образовательной экосистемы [Maestro7IT](https://school-maestro7it.ru/).
 
 [![Author](https://img.shields.io/badge/author-Дуплей%20Максим%20Игоревич-f7a224?style=flat-square)](https://orcid.org/0009-0007-7605-539X)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0007--7605--539X-a6ce39?style=flat-square&logo=orcid)](https://orcid.org/0009-0007-7605-539X)
