@@ -10,17 +10,13 @@ import {
   GraduationCap,
   Calendar,
   Hash,
-  ArrowRight,
   CornerDownLeft,
-  Sun,
-  Moon,
   Palette,
   ExternalLink,
   BookOpen,
   User,
   Briefcase,
   Mail,
-  Copy,
   Command,
 } from "lucide-react";
 import { publications, author } from "@/data/publications";
@@ -316,8 +312,12 @@ export function CommandPalette() {
   const grouped = React.useMemo(() => {
     const map = new Map<string, CommandItem[]>();
     for (const it of filtered) {
-      if (!map.has(it.group)) map.set(it.group, []);
-      map.get(it.group)!.push(it);
+      const list = map.get(it.group);
+      if (list) {
+        list.push(it);
+      } else {
+        map.set(it.group, [it]);
+      }
     }
     return Array.from(map.entries());
   }, [filtered]);

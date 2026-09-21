@@ -192,7 +192,7 @@ export function Publications() {
     });
 
     return list;
-  }, [query, activeCats, sort, favoritesOnly, favorites, isFavorite]);
+  }, [query, activeCats, sort, favoritesOnly, isFavorite]);
 
   const visible = filtered.slice(0, limit);
   const hasMore = filtered.length > limit;

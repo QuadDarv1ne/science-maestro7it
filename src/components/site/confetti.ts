@@ -77,7 +77,6 @@ function draw() {
   if (!ctx || !canvas) return;
   ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-  const now = performance.now();
   particles = particles.filter((p) => p.life > 0);
 
   for (const p of particles) {

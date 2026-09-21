@@ -2,7 +2,7 @@
   "name": "science-maestro7it",
   "version": "1.0.0",
   "private": true,
-  "description": "Science Maestro7IT — персональный сайт научных публикаций Дуплея Максима Игоревича",
+  "description": "Science Maestro7IT — персональный сайт научных публикаций Дуплей Максима Игоревича",
   "scripts": {
     "dev": "next dev -p 3000 2>&1 | tee dev.log",
     "build": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",

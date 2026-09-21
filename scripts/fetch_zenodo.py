@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-"""Fetch metadata for all 30 Zenodo publications using curl, save as JSON."""
+"""Fetch metadata for all 38 Zenodo publications using curl, save as JSON."""
 import json
 import subprocess
 import re
 import time
 
 RECORD_IDS = [
+    22735364, 21900472, 21900461, 21490373, 21284095, 21260192,
+    21259945, 20811658,
     20751636, 20751627, 20751600, 20751577, 20751554, 20751520,
     20598408, 20598410, 20496190, 20496164, 20496110, 20496031,
     20473085, 20457816, 20457822, 20450307, 20450305, 20450309,

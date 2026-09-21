@@ -41,10 +41,11 @@ export function Timeline() {
       if (!map.has(key)) {
         map.set(key, { key, label, count: 0, categories: {} });
       }
-      const b = map.get(key)!;
-      b.count += 1;
+      const bucket = map.get(key);
+      if (!bucket) continue;
+      bucket.count += 1;
       for (const c of p.categories) {
-        b.categories[c] = (b.categories[c] || 0) + 1;
+        bucket.categories[c] = (bucket.categories[c] || 0) + 1;
       }
     }
     // Sort chronologically (oldest first for left-to-right)

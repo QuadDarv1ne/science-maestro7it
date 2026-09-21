@@ -1,0 +1,18 @@
+#!/bin/sh
+# Auto-push current branch to ALL remotes (origin, amvera, ...) after each commit.
+# Enabled via: git config core.hooksPath .githooks
+# To skip a single commit:  git commit --no-verify
+
+branch=$(git symbolic-ref --quiet --short HEAD) || exit 0
+
+for remote in $(git remote); do
+  echo "[post-commit] pushing '$branch' -> '$remote'..."
+  if git push --quiet "$remote" "HEAD:refs/heads/$branch"; then
+    echo "[post-commit] '$remote' updated"
+  else
+    echo "[post-commit] ERROR: push to '$remote' failed." >&2
+    echo "[post-commit] fix manually: git push $remote $branch" >&2
+  fi
+done
+
+exit 0

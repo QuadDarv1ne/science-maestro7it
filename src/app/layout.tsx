@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "Science Maestro7IT — Дуплей Максим Игоревич · Научные публикации",
   description:
-    `Science Maestro7IT — персональный сайт научных работ Дуплея Максима Игоревича: старшего преподавателя информационных технологий, аналитика, философа, музыканта и DevOps-инженера. ${publications.length} научных публикаций на Zenodo.`,
+    `Science Maestro7IT — персональный сайт научных работ Дуплей Максима Игоревича: старшего преподавателя информационных технологий, аналитика, философа, музыканта и DevOps-инженера. ${publications.length} научных публикаций на Zenodo.`,
   keywords: [
     "Science Maestro7IT",
     "Дуплей Максим Игоревич",

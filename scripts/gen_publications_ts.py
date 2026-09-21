@@ -35,6 +35,31 @@ CATEGORY_LABELS_RU = {
     "tech_policy": "Технологическая политика",
 }
 
+# Fix known typos in source texts (survive re-fetching since applied at generation time)
+TYPO_FIXES = {
+    "модерацция": "модерация",
+    "о персональные данные": "о персональных данных",
+}
+
+def normalize_text(s: str, is_title: bool = False) -> str:
+    """Fix whitespace artifacts left by HTML cleanup in Zenodo descriptions."""
+    for a, b in TYPO_FIXES.items():
+        s = s.replace(a, b)
+    # "( NLP )" -> "(NLP)"
+    s = re.sub(r'\(\s+', '(', s)
+    s = re.sub(r'\s+\)', ')', s)
+    # "Accuracy ," -> "Accuracy,"
+    s = re.sub(r'([A-Za-zА-Яа-яЁё0-9])\s+([,.;:!?])', r'\1\2', s)
+    # "RTL - SDR" -> "RTL-SDR", "IDS / IPS" -> "IDS/IPS" (latin/digits only)
+    s = re.sub(r'([A-Za-z0-9]) - ([A-Za-z0-9])', r'\1-\2', s)
+    s = re.sub(r'([A-Za-z0-9]) / ([A-Za-z0-9])', r'\1/\2', s)
+    # single-letter tokens: "F 1- Score" -> "F1-Score", "v 4" -> "v4", "S 3" -> "S3"
+    s = re.sub(r'\b([A-Za-z]) (\d)(?=[\s,.)-])', r'\1\2', s)
+    # Titles: "X - Y" -> "X — Y" (typographic dash)
+    if is_title:
+        s = re.sub(r'(\S) - (\S)', r'\1 — \2', s)
+    return re.sub(r'\s+', ' ', s).strip()
+
 def categorize(title: str, abstract: str) -> list:
     text = (title + " " + abstract).lower()
     cats = set()
@@ -52,8 +77,8 @@ processed = []
 for r in records:
     if 'error' in r:
         continue
-    title = r.get('title', '').strip()
-    abstract = r.get('abstract', '').strip()
+    title = normalize_text(r.get('title', '').strip(), is_title=True)
+    abstract = normalize_text(r.get('abstract', '').strip())
     # Truncate abstract for card display, keep full for modal
     abstract_short = (abstract[:280] + '…') if len(abstract) > 280 else abstract
     cats = categorize(title, abstract)

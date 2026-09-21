@@ -61,7 +61,6 @@ const FORMATS: CitationFormat[] = [
     label: "RIS (EndNote/Mendeley)",
     icon: FileText,
     generate: (p) => {
-      const date = new Date(p.publicationDate);
       return `TY  - JOUR
 AU  - Dupley, M. I.
 TI  - ${p.title}

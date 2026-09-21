@@ -36,7 +36,7 @@ export function GET() {
   const rss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>Science Maestro7IT — Научные публикации Дуплея Максима Игоревича</title>
+    <title>Science Maestro7IT — Научные публикации Дуплей Максима Игоревича</title>
     <link>${SITE_URL}</link>
     <atom:link href="${SITE_URL}/rss.xml" rel="self" type="application/rss+xml" />
     <description>${publications.length} научных публикаций на Zenodo в области ИИ, образования, лингвистики, международных отношений и радиотехнологий.</description>
