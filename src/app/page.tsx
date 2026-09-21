@@ -1,6 +1,7 @@
 import { Header } from "@/components/site/header";
 import { Hero } from "@/components/site/hero";
 import { About } from "@/components/site/about";
+import { Certifications } from "@/components/site/certifications";
 import { Stats } from "@/components/site/stats";
 import { Timeline } from "@/components/site/timeline";
 import { Publications } from "@/components/site/publications";
@@ -37,6 +38,7 @@ export default function Home() {
         <main id="main-content" className="flex-1">
           <Hero />
           <About />
+          <Certifications />
           <Achievements />
           <Stats />
           <Timeline />
