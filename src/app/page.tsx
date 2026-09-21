@@ -10,6 +10,7 @@ import { Footer } from "@/components/site/footer";
 import { ScrollEnhancements } from "@/components/site/scroll-enhancements";
 import { CommandPalette } from "@/components/site/command-palette";
 import { ShortcutsHelp } from "@/components/site/shortcuts-help";
+import { Achievements } from "@/components/site/achievements";
 import {
   FavoritesProvider,
 } from "@/components/site/favorites-context";
@@ -36,6 +37,7 @@ export default function Home() {
         <main id="main-content" className="flex-1">
           <Hero />
           <About />
+          <Achievements />
           <Stats />
           <Timeline />
           <Publications />

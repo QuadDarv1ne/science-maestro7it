@@ -28,8 +28,37 @@ export function Header() {
   const [scrolled, setScrolled] = React.useState(false);
   const [hidden, setHidden] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+  const [activeSection, setActiveSection] = React.useState("about");
   const { scrollY } = useScroll();
   const lastScrollY = React.useRef(0);
+
+  React.useEffect(() => {
+    const sections = NAV_LINKS.map((link) => document.getElementById(link.href.slice(1)))
+      .filter(Boolean) as HTMLElement[];
+
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visibleEntries.length > 0) {
+          setActiveSection(visibleEntries[0].target.id);
+        }
+      },
+      {
+        root: null,
+        threshold: [0.2, 0.35, 0.55, 0.75],
+        rootMargin: "-20% 0px -40% 0px",
+      }
+    );
+
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, []);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     const previous = lastScrollY.current;
@@ -88,15 +117,24 @@ export function Header() {
                 : "px-0 py-0"
             }`}
           >
-            {NAV_LINKS.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                className="nav-underline text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-foreground/5 rounded-full px-3 py-1.5 transition-colors"
-              >
-                {l.label}
-              </a>
-            ))}
+            {NAV_LINKS.map((l) => {
+              const isActive = activeSection === l.href.slice(1);
+
+              return (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  aria-current={isActive ? "page" : undefined}
+                  className={`nav-underline text-sm font-medium rounded-full px-3 py-1.5 transition-colors ${
+                    isActive
+                      ? "bg-accent/10 text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground hover:bg-foreground/5"
+                  }`}
+                >
+                  {l.label}
+                </a>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-1.5">
@@ -146,16 +184,25 @@ export function Header() {
                       </Button>
                     </SheetClose>
                   </div>
-                  {NAV_LINKS.map((l) => (
-                    <SheetClose asChild key={l.href}>
-                      <a
-                        href={l.href}
-                        className="px-3 py-2.5 rounded-md text-sm font-medium hover:bg-muted transition-colors"
-                      >
-                        {l.label}
-                      </a>
-                    </SheetClose>
-                  ))}
+                  {NAV_LINKS.map((l) => {
+                    const isActive = activeSection === l.href.slice(1);
+
+                    return (
+                      <SheetClose asChild key={l.href}>
+                        <a
+                          href={l.href}
+                          aria-current={isActive ? "page" : undefined}
+                          className={`px-3 py-2.5 rounded-md text-sm font-medium transition-colors ${
+                            isActive
+                              ? "bg-accent/10 text-foreground"
+                              : "hover:bg-muted text-muted-foreground hover:text-foreground"
+                          }`}
+                        >
+                          {l.label}
+                        </a>
+                      </SheetClose>
+                    );
+                  })}
                   <a
                     href="https://github.com/QuadDarv1ne/scientific-publications"
                     target="_blank"
